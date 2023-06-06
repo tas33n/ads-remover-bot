@@ -4,6 +4,22 @@ const fs = require('fs');
 const https = require('https');
 const { Telegraf } = require('telegraf');
 
+const express = require('express');
+
+const app = express();
+const port = process.env.PORT || 3000;
+
+// Route to display server uptime
+app.get('/', (req, res) => {
+  const uptime = process.uptime();
+  res.send(`Server uptime: ${uptime} seconds`);
+});
+
+app.listen(port, () => {
+  console.log(`Express app is listening on port ${port}`);
+});
+
+
 function modifyAndSignAPK(apkFilePath) {
   // Output directory for decompiled files
   const outputDir = 'directory';
@@ -131,43 +147,101 @@ bot.start((ctx) => {
   ctx.reply('Welcome to the APK Bot! Send me an APK file, and I will process it.');
 });
 
+// // Handle the APK file
+// bot.on('document', async (ctx) => {
+//   const file = ctx.message.document;
+
+//   // Check if the file is an APK
+//   if (file.mime_type === 'application/vnd.android.package-archive') {
+//     const fileId = file.file_id;
+
+    
+
+//     try {
+//       // Get the file path from Telegram API
+//        const waitMessage = await ctx.reply('Please wait while processing the APK file...');
+
+    
+//       const fileInfo = await bot.telegram.getFile(fileId);
+//       const downloadUrl = `https://api.telegram.org/file/bot${bot.token}/${fileInfo.file_path}`;
+
+//       // Download the APK file
+//       const downloadedFilePath = path.join(__dirname, `input.apk`);
+//       await downloadFile(downloadUrl, downloadedFilePath);
+
+//       // Process and sign the APK
+//       const signedAPKPath = modifyAndSignAPK(downloadedFilePath);
+
+//       if (signedAPKPath) {
+//         console.log('Signed APK:', signedAPKPath);
+//         // Send the signed APK back to the user or perform further operations
+//         await ctx.replyWithDocument({ source: signedAPKPath });
+//       } else {
+//         console.log('Failed to modify and sign APK.');
+//         await ctx.reply('Sorry, an error occurred while processing the APK file.');
+//       }
+
+//       // Delete the downloaded APK file
+//       fs.unlinkSync(downloadedFilePath);
+//     } catch (error) {
+//       console.error('Error:', error);
+//       await ctx.reply('Sorry, an error occurred while processing the APK file.');
+//     }
+//   } else {
+//     await ctx.reply('Please send a valid APK file.');
+//   }
+// });
+
+
 // Handle the APK file
 bot.on('document', async (ctx) => {
   const file = ctx.message.document;
 
+  console.log(ctx);
+
   // Check if the file is an APK
   if (file.mime_type === 'application/vnd.android.package-archive') {
     const fileId = file.file_id;
+    const filePath = bot.telegram.getFileLink(fileId);
 
     try {
-      // Get the file path from Telegram API
+      // Send a "Please wait" message
+      const waitMessage = await ctx.reply('Please wait while processing the APK file...');
+
+      // Download the APK file
       const fileInfo = await bot.telegram.getFile(fileId);
+      const apkPath = `./${fileInfo.file_unique_id}.apk`;
       const downloadUrl = `https://api.telegram.org/file/bot${bot.token}/${fileInfo.file_path}`;
 
       // Download the APK file
-      const downloadedFilePath = path.join(__dirname, `input.apk`);
-      await downloadFile(downloadUrl, downloadedFilePath);
+      const downloadedFilePath = await bot.telegram.downloadFile(fileInfo.file_id, downloadUrl, apkPath);
 
-      // Process and sign the APK
+      // Example usage:
       const signedAPKPath = modifyAndSignAPK(downloadedFilePath);
 
       if (signedAPKPath) {
         console.log('Signed APK:', signedAPKPath);
         // Send the signed APK back to the user or perform further operations
         await ctx.replyWithDocument({ source: signedAPKPath });
+
+        // Delete the "Please wait" message after 5 seconds
+        setTimeout(async () => {
+          try {
+            await ctx.deleteMessage(waitMessage.message_id);
+            console.log('Please wait message deleted.');
+          } catch (error) {
+            console.error('Failed to delete please wait message:', error);
+          }
+        }, 5000);
       } else {
         console.log('Failed to modify and sign APK.');
-        await ctx.reply('Sorry, an error occurred while processing the APK file.');
       }
-
-      // Delete the downloaded APK file
-      fs.unlinkSync(downloadedFilePath);
     } catch (error) {
       console.error('Error:', error);
-      await ctx.reply('Sorry, an error occurred while processing the APK file.');
+      ctx.reply('Sorry, an error occurred while processing the APK file.');
     }
   } else {
-    await ctx.reply('Please send a valid APK file.');
+    ctx.reply('Please send a valid APK file.');
   }
 });
 
