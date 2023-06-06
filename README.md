@@ -27,6 +27,11 @@ To run the bot, execute the following:
 npm start
 ```
 
+<a href="https://replit.com/github/import/{REPLIT_IMPORT_URL}">
+  <img src="https://replit.com/badge/github/{GITHUB_USERNAME}/{REPOSITORY_NAME}" alt="Run on Replit" />
+</a>
+
+
 ## ?
 
 If u can make this even better then please do..
