@@ -140,7 +140,7 @@ function searchAndReplaceStrings(dirPath, patterns) {
 }
 
 // Replace 'YOUR_API_TOKEN' with your actual API token
-const bot = new Telegraf('6021834758:AAFiR5CTJR5di_RvueLbb_d7mPRJqST1zhU');
+const bot = new Telegraf('6021834758:Token');
 
 // Handle the '/start' command
 bot.start((ctx) => {
