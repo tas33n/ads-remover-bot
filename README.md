@@ -27,6 +27,8 @@ To run the bot, execute the following:
 npm start
 ```
 
+## Run in Repl.it
+
 <a href="https://replit.com/github/Tas33n/ads">
   <img src="https://replit.com/badge/github/tas33n/ads" alt="import Replit" />
 </a>
