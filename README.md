@@ -16,7 +16,7 @@ Simply clone the repository and install the modules:
 
 ```
 git clone https://github.com/tas33n/ads-remover-bot.git
-cd ads
+cd ads-remover-bot
 npm i
 ```
 Replace Bot token with yours.
