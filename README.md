@@ -28,7 +28,7 @@ npm start
 ```
 
 <a href="https://replit.com/github/import/{REPLIT_IMPORT_URL}">
-  <img src="https://replit.com/badge/github/{GITHUB_USERNAME}/{REPOSITORY_NAME}" alt="Run on Replit" />
+  <img src="https://replit.com/badge/github/{tas33n}/{ads}" alt="import Replit" />
 </a>
 
 
