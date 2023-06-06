@@ -15,7 +15,7 @@ A telegram bot that can remove simple app ads by using some commonly used ads re
 Simply clone the repository and install the modules: 
 
 ```
-git clone https://github.com/tas33n/ads.git
+git clone https://github.com/tas33n/ads-remover-bot.git
 cd ads
 npm i
 ```
@@ -29,8 +29,8 @@ npm start
 
 ## Run in Repl.it
 
-<a href="https://replit.com/github/Tas33n/ads">
-  <img src="https://replit.com/badge/github/tas33n/ads" alt="import Replit" />
+<a href="https://replit.com/github/Tas33n/ads-remover-bot">
+  <img src="https://replit.com/badge/github/tas33n/ads-remover-bot.git" alt="import Replit" />
 </a>
 
 
